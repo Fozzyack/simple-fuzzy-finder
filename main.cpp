@@ -1,4 +1,4 @@
-#include <cctype>
+#include <unistd.h>
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -46,13 +46,20 @@ string search_screen(vector<string> &dirs, string search, int &index) {
 
 int main(int argc, char *argv[]) {
 
-    fs::path path(".");
+    fs::path path("./");
     if (argc > 1) {
         path = argv[1];
     }
 
 
-    initscr();
+    SCREEN *s = NULL;
+    FILE* out = stdout;
+    if(!isatty(fileno(stdout))) {
+        out = fopen("/dev/tty", "w");
+        // Should really test `out` to make sure that worked.
+        setbuf(out, NULL);
+    }
+    s = newterm(NULL, out, stdin);
     cbreak();
     noecho();
     keypad(stdscr, true);
@@ -65,16 +72,20 @@ int main(int argc, char *argv[]) {
     int ch;
     int index = -1;
 
-    while(true) {
+    while(ch != '\n') {
         clear();
         res_path = search_screen(dirs, search, index);
+        if (res_path != "") {
+            printw("Current: %s\n", res_path.c_str());
+            printw("Current: %s\n", fs::absolute(res_path).c_str());
+        }
         printw("Search: %s", search.c_str());
         refresh();
         ch = getch();
         switch(ch) {
             case KEY_BACKSPACE:
             case KEY_DC:
-                search.pop_back();
+                if (search.size() != 0) search.pop_back();
                 break;
             case KEY_UP:
                 index--;
@@ -86,15 +97,6 @@ int main(int argc, char *argv[]) {
                 break;
             case KEY_RIGHT:
                 break;
-            case KEY_ENTER:
-                {
-                    string tmp;
-                    path = res_path;
-                    tmp = fs::absolute(path);
-                    endwin();
-                    cout << tmp << endl;
-                    break;
-                }
             default:
                 search += ch;
                 index = -1;
@@ -102,6 +104,15 @@ int main(int argc, char *argv[]) {
         }
     }
     endwin();
+    fs::path final(res_path);
+    if(!fs::is_directory(final)) {
+        final.remove_filename();
+    }
+    if(chdir(fs::absolute(final).c_str()) == 0) {
+        cout << "Directory Changed to: " << final.string() << endl;
+    } else {
+        cout << "Failed";
+    }
 
     return 0;
 }
