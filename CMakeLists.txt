@@ -1,3 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(ffcli)
+find_package(Curses REQUIRED)
 add_executable(ffcli main.cpp)
+target_link_libraries(ffcli PRIVATE ${CURSES_LIBRARIES})
+target_include_directories(ffcli PRIVATE ${CURSES_INCLUDE_DIR})
