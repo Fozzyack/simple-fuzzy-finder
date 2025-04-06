@@ -52,14 +52,15 @@ int main(int argc, char *argv[]) {
     }
 
 
+    // Running this in a new terminal
     SCREEN *s = NULL;
     FILE* out = stdout;
     if(!isatty(fileno(stdout))) {
         out = fopen("/dev/tty", "w");
-        // Should really test `out` to make sure that worked.
         setbuf(out, NULL);
     }
     s = newterm(NULL, out, stdin);
+
     cbreak();
     noecho();
     keypad(stdscr, true);
