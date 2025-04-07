@@ -10,6 +10,11 @@ using namespace std;
 namespace fs = std::filesystem;
 
 
+/*
+ * Returns a vector of all possible files
+ * Could potential remove (duplicates) and not add it in if the file is a directory
+ */
+
 vector<string> create_file_list(fs::path &path) {
     vector<string> res;
     for(fs::directory_entry dir_entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied)) {
@@ -17,6 +22,11 @@ vector<string> create_file_list(fs::path &path) {
     }
     return res;
 }
+
+/*
+ * Provides the real time searching of data through the screen.
+ * Displays the top LIST_SIZE results
+ */
 
 string search_screen(vector<string> &dirs, string search, int &index) {
 
@@ -56,7 +66,10 @@ int main(int argc, char *argv[]) {
     }
 
 
-    // Running this in a new terminal
+    /*
+     * Creates a new screen. There is a problem if you try to print to stdout
+     */
+
     SCREEN *s = NULL;
     FILE* out = stdout;
     if(!isatty(fileno(stdout))) {
@@ -72,20 +85,23 @@ int main(int argc, char *argv[]) {
 
     vector<string> dirs = create_file_list(path);
 
-    string search;
-    string res_path;
-    int ch;
-    int index = -1;
+    string search; //Holds the search string
+    string res_path; // Holds the currently selected path
+    int ch; // The character that the user enters
+    int index = -1; //The index of the list which the user has selected
 
+    /*
+     * The main loop that runs
+     */
     while(ch != '\n') {
         clear();
         res_path = search_screen(dirs, search, index);
-        if (res_path != "") {
-            printw("Current: %s\n", res_path.c_str());
-            printw("Current: %s\n", fs::absolute(res_path).c_str());
+        if (res_path != "") { // Print the users current selection
+            printw("Current Selection: %s\n", res_path.c_str());
         }
         printw("Search: %s", search.c_str());
         refresh();
+
         ch = getch();
         switch(ch) {
             case KEY_BACKSPACE:
@@ -109,6 +125,7 @@ int main(int argc, char *argv[]) {
                 break;
         }
     }
+
     endwin();
     fs::path final(res_path);
     if(!fs::is_directory(final)) {

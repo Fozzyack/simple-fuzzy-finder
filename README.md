@@ -5,6 +5,11 @@
 Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
 new project to complete
 
+## Discovery
+
+Turns out you cannot get the user to directly cd into a directory through a C++ program. This needs to be installed
+alongside some sort of shell script.
+
 ## Solution
 
 Create a simple fuzzy finder for your files.
