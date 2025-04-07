@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -16,12 +17,18 @@ namespace fs = std::filesystem;
  * Could potential remove (duplicates) and not add it in if the file is a directory
  */
 
-vector<string> create_file_list(fs::path &path) {
+vector<string> create_file_list(fs::path &path, bool dir_only) {
     vector<string> res;
+    res.push_back(path.string());
     set<string> seen;
     for(fs::directory_entry dir_entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied)) {
-        if (dir_entry.is_directory() && !seen.count(dir_entry.path())) {
-            seen.insert(dir_entry.path());
+        if (dir_only) {
+            if (dir_entry.is_directory() && !seen.count(dir_entry.path())) {
+                seen.insert(dir_entry.path());
+                res.push_back(dir_entry.path());
+            }
+        }
+        else {
             res.push_back(dir_entry.path());
         }
     }
@@ -66,9 +73,15 @@ string search_screen(vector<string> &dirs, string search, int &index) {
 
 int main(int argc, char *argv[]) {
 
+    char *home = getenv("HOME");
     fs::path path("./");
+
     if (argc > 1) {
-        path = argv[1];
+        if (string(argv[1]) == "-s" || string(argv[1]) == "--start") path = string(home);
+        else if (string(argv[1]) == "--help" || string(argv[1]) == "-h") {
+            exit(5);
+        }
+        else path = argv[1];
     }
 
 
@@ -89,7 +102,7 @@ int main(int argc, char *argv[]) {
     keypad(stdscr, true);
     scrollok(stdscr, true);
 
-    vector<string> dirs = create_file_list(path);
+    vector<string> dirs = create_file_list(path, false);
 
     string search; //Holds the search string
     string res_path; // Holds the currently selected path
@@ -136,7 +149,7 @@ int main(int argc, char *argv[]) {
     endwin();
     if (res_path == "") {
         cout << "No Option selected (returned an empty path)" << endl;
-        exit(1);
+        exit(0);
     }
 
     fs::path final(res_path);
