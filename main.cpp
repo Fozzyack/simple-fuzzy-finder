@@ -5,6 +5,7 @@
 #include <vector>
 #include <filesystem>
 #include <ncurses.h>
+#include <set>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -17,8 +18,12 @@ namespace fs = std::filesystem;
 
 vector<string> create_file_list(fs::path &path) {
     vector<string> res;
+    set<string> seen;
     for(fs::directory_entry dir_entry : fs::recursive_directory_iterator(path, fs::directory_options::skip_permission_denied)) {
-        res.push_back(dir_entry.path());
+        if (dir_entry.is_directory() && !seen.count(dir_entry.path())) {
+            seen.insert(dir_entry.path());
+            res.push_back(dir_entry.path());
+        }
     }
     return res;
 }
@@ -37,13 +42,15 @@ string search_screen(vector<string> &dirs, string search, int &index) {
 
     copy_if(dirs.begin(), dirs.end(), std::back_inserter(print_dir),
             [search](std::string &s) {
-                return !s.empty() && s.find(search) != string::npos;
+            return !s.empty() && s.find(search) != string::npos;
             });
 
-    size_t entry_length = min((int)print_dir.size() - 1, LIST_SIZE);
-    if(index < 0) index = entry_length;
-    index = index % entry_length;
-    
+    size_t entry_length = min((int)print_dir.size(), LIST_SIZE);
+    if (print_dir.size() != 0) {
+        if(index < 0) index = entry_length - 1;
+        index = index % entry_length;
+    } else index = 0;
+
     for (size_t i = 0; i < entry_length; i++) {
         if (index == i) {
             printw("[*] %s\n", print_dir[i].c_str());
@@ -56,7 +63,6 @@ string search_screen(vector<string> &dirs, string search, int &index) {
     printw("%d size of index\n", index);
     return res;
 }
-
 
 int main(int argc, char *argv[]) {
 
@@ -88,7 +94,7 @@ int main(int argc, char *argv[]) {
     string search; //Holds the search string
     string res_path; // Holds the currently selected path
     int ch; // The character that the user enters
-    int index = -1; //The index of the list which the user has selected
+    int index = 0; //The index of the list which the user has selected
 
     /*
      * The main loop that runs
@@ -111,7 +117,8 @@ int main(int argc, char *argv[]) {
             case KEY_UP:
                 index--;
                 break;
-            case KEY_BTAB:
+            case KEY_STAB:
+            case '\t':
             case KEY_DOWN:
                 index++;
                 break;
@@ -121,17 +128,22 @@ int main(int argc, char *argv[]) {
                 break;
             default:
                 search += ch;
-                index = -1;
+                index = 0;
                 break;
         }
     }
 
     endwin();
+    if (res_path == "") {
+        cout << "No Option selected (returned an empty path)" << endl;
+        exit(1);
+    }
+
     fs::path final(res_path);
     if(!fs::is_directory(final)) {
         final.remove_filename();
     }
-    cout << fs::absolute(final) << endl;
+    cout << fs::absolute(final).string() << endl;
 
     return 0;
 }
