@@ -7,8 +7,9 @@ new project to complete
 
 ## Discovery
 
-Turns out you cannot get the user to directly cd into a directory through a C++ program. This needs to be installed
-alongside some sort of shell script.
+- Turns out you cannot get the user to directly cd into a directory through a C++ program. This needs to be installed
+- You do need to tamper with your shell in order to run this. Might add to the dotman installer to help with the
+  installation of tools.
 
 ## Solution
 
