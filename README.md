@@ -6,11 +6,13 @@
 new project to complete
 - You cannot easily change the working directory of a user using a C++ program. You will have to eventually, interact
   with the shell. Therefore, there must also be some form of configuration is the shells config with either:
+
   ```
   .bashrc
   OR
   .config/fish/config.fish
   ```
+
 
 ## Solution
 
@@ -25,3 +27,7 @@ yet.
 ## Tech
 
 Will be using C++. For the speed. Might try to add multithreading for no the memes.
+
+## Other features to add
+
+Change search so that it is case insensitive.
