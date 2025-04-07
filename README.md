@@ -2,8 +2,15 @@
 
 ## Problem
 
-Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
+- Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
 new project to complete
+- You cannot easily change the working directory of a user using a C++ program. You will have to eventually, interact
+  with the shell. Therefore, there must also be some form of configuration is the shells config with either:
+  ```
+  .bashrc
+  OR
+  .config/fish/config.fish
+  ```
 
 ## Solution
 
