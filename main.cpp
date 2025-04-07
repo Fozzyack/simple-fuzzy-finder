@@ -20,17 +20,21 @@ vector<string> create_file_list(fs::path &path) {
 
 string search_screen(vector<string> &dirs, string search, int &index) {
 
+    int LIST_SIZE = 35;
+
     vector<string> print_dir;
     string res;
+
     copy_if(dirs.begin(), dirs.end(), std::back_inserter(print_dir),
             [search](std::string &s) {
                 return !s.empty() && s.find(search) != string::npos;
             });
 
-    if (index < 0) index = print_dir.size() -1;
-    if (index >= print_dir.size()) index = 0;
+    size_t entry_length = min((int)print_dir.size() - 1, LIST_SIZE);
+    if(index < 0) index = entry_length;
+    index = index % entry_length;
     
-    for (size_t i = max((int)print_dir.size() - 30, 0); i < max((int)print_dir.size(), 0); i++) {
+    for (size_t i = 0; i < entry_length; i++) {
         if (index == i) {
             printw("[*] %s\n", print_dir[i].c_str());
             res = print_dir[i];
@@ -91,6 +95,7 @@ int main(int argc, char *argv[]) {
             case KEY_UP:
                 index--;
                 break;
+            case KEY_BTAB:
             case KEY_DOWN:
                 index++;
                 break;
@@ -109,11 +114,7 @@ int main(int argc, char *argv[]) {
     if(!fs::is_directory(final)) {
         final.remove_filename();
     }
-    if(chdir(fs::absolute(final).c_str()) == 0) {
-        cout << "Directory Changed to: " << final.string() << endl;
-    } else {
-        cout << "Failed";
-    }
+    cout << fs::absolute(final) << endl;
 
     return 0;
 }
