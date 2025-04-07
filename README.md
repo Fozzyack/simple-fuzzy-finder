@@ -5,15 +5,15 @@
 Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
 new project to complete
 
+## Solution
+
+Create a simple fuzzy finder for your files.
+
 ## Discovery
 
 - Turns out you cannot get the user to directly cd into a directory through a C++ program. This needs to be installed
 - You do need to tamper with your shell in order to run this. Might add to the dotman installer to help with the
   installation of tools.
-
-## Solution
-
-Create a simple fuzzy finder for your files.
 
 ## How it's going to work
 
