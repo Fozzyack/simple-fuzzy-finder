@@ -2,7 +2,6 @@
 #include <string>
 #include <algorithm>
 #include <curses.h>
-#include <unordered_map>
 #include <vector>
 
 #include <thread>
@@ -56,14 +55,11 @@ void thread_score(int start, int end, const std::vector<std::string> &dirs, cons
     out.insert(out.end(), local.begin(), local.end());
 }
 
-void render(const std::vector<std::string> &dirs, const std::string &search, int entries, int &choice, std::string &res) {
- 
-    std::vector<std::string> result;
-
-
+void search_paths (const std::vector<std::string> dirs, const std::string &search, std::vector<std::string> &result) {
 
     if (search == "") result = dirs;
     else {
+        result.clear();
         size_t num_threads = std::thread::hardware_concurrency();
         size_t total_size = dirs.size();
         std::vector<std::thread> threads;
@@ -81,32 +77,31 @@ void render(const std::vector<std::string> &dirs, const std::string &search, int
 
         sort(scored_out.begin(), scored_out.end(),
                 [](const std::pair<int, std::string> &a, const std::pair<int, std::string> &b) {
-                    return a.first > b.first;
+                return a.first > b.first;
                 });
 
-        for (int i = 0; i < scored_out.size() ; i++) {
+        for (int i = 0; i < scored_out.size(); i++) {
             result.push_back(scored_out[i].second);
         }
     }
+}
 
+std::string render(const std::vector<std::string> &result, int &choice, int entries) {
+ 
+    size_t total_size = result.size() < entries ? result.size() : entries;
 
+    if (choice < 0) choice = total_size - 1;
+    else if (choice > total_size) choice = 0;
 
-
-
-    size_t result_size = result.size() > entries ? entries : result.size();
-    if (choice < 0) choice = result_size > 0 ? result_size - 1 : 0;
-    else if (choice >= result_size) choice = 0;
-   
-    for(int i = 0; i < result.size() && i < entries; i++) {
-        if (choice == i) {
-            printw("[*] ");
-        }
+    for(size_t i = 0; i < total_size; i++) {
+        if (choice == i) printw("[*] ");
         printw("%s\n", result[i].c_str());
     }
 
-    if (result_size> 0) res = result[choice];
-    printw("\nTotal Size: %d\n", (int)result.size());
+    std::string res;
+    res = total_size > 0 ? result[choice] : "No Directory Chosen";
+    return res;
 
-    result_size > 0 ? res = result[choice] : res = "";
-    printw("\nCurrent choice: %s\n", res.c_str());
+
 }
+
