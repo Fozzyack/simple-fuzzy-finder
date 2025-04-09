@@ -124,7 +124,9 @@ std::string render(const std::vector<std::string> &result, int &choice, int entr
                 attroff(COLOR_PAIR(1));
             }
             else {
+                attron(COLOR_PAIR(2));
                 printw("%c", result[i][j]);
+                attroff(COLOR_PAIR(2));
             }
         }
         printw("\n");

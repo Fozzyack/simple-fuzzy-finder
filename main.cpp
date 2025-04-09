@@ -28,6 +28,7 @@ void print_dirs(const std::vector<std::string> &dirs, int entries) {
 }
 
 void get_search_hashmap(const std::string &search, std::set<char> &char_set) {
+    char_set.clear();
     for(int i = 0; i < search.size(); i++) char_set.insert(tolower(search[i]));
 }
 
@@ -83,6 +84,7 @@ int main(int argc, char *argv[]) {
     start_color();
     use_default_colors();
     init_pair(1, COLOR_MAGENTA, -1);
+    init_pair(2, COLOR_WHITE, -1);
 
     create_dir_thread.join();
 
@@ -111,6 +113,7 @@ int main(int argc, char *argv[]) {
             case KEY_BACKSPACE:
                 if (search.size() > 0) search.pop_back();
                 search_paths(dirs, search, result);
+                get_search_hashmap(search, char_set);
                 break;
             case KEY_UP:
                 choice--;
