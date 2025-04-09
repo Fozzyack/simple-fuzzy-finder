@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
             path = home;
         } else {
             std::cout << "Unknown argument given -- Try using -h for help" << std::endl;
+            exit(1);
         }
     }
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[]) {
     }
 
     s = newterm(NULL, out, stdin);
-    initscr();
+
     scrollok(stdscr, true);
     keypad(stdscr, true);
     cbreak();
@@ -132,7 +133,11 @@ int main(int argc, char *argv[]) {
     }
 
     fs::path res(selected_path);
+    if(!fs::is_directory(res)) {
+        res.remove_filename();
+    }
     std::cout << fs::absolute(res).string() << std::endl;
+
 
     return 0;
 }
