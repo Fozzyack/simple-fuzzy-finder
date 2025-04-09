@@ -16,18 +16,33 @@ new project to complete
 
 ## Solution
 
-Create a simple fuzzy finder for your files.
+Create a simple fuzzy finder for your files. And make script installation easy.
 
 ## How it's going to work
 
-Currently, it should read all the files in the current directory (or a directory provided). Then, it should allow the
-user to search through all of the files and move into (```cd```) into that directory. Might make it look nice but idk
-yet.
+- Make a scoring algorithm for files
+- The highest scores should be the files we are looking for
+- Split the directory files into batches for multithreading
+- Make it look pretty
 
 ## Tech
 
 Will be using C++. For the speed. Might try to add multithreading for no the memes.
 
-## Other features to add
+## Implementation
 
-Change search so that it is case insensitive.
+- [x] Implement __ncurses__
+- [x] Create new terminal Screen instead of using stdout
+- [x] Get starting path using the C++ __FILESYSTEM__
+- [x] Recursively get all other paths
+- [x] Use multithreading to set up terminal and get directories simultaneously
+- [x] Set up loop which runs on keystroke 
+- [x] Enable function keys, arrows and scroll 
+- [x] Split directories into chunks for __MULTITHREADING__
+- [x] Use __MUTEX__ and locks to deal with raceconditions when fuzzy finding
+- [x] Design Fuzzy Finding Scoring Algorithm
+- [x] Implement Algorithm 
+- [x] Set up Display 
+- [x] Add Colour to show user search
+- [x] Add icons to search
+

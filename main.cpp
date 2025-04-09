@@ -28,7 +28,7 @@ void print_dirs(const std::vector<std::string> &dirs, int entries) {
 }
 
 void get_search_hashmap(const std::string &search, std::set<char> &char_set) {
-    for(int i = 0; i < search.size(); i++) char_set.insert(search[i]);
+    for(int i = 0; i < search.size(); i++) char_set.insert(tolower(search[i]));
 }
 
 

@@ -117,7 +117,7 @@ std::string render(const std::vector<std::string> &result, int &choice, int entr
         else if(fs::is_regular_file(path)) printw("📄 ");
             
         for(int j = 0; j < result[i].size(); j++) {
-            if (char_set.count(result[i][j])) {
+            if (char_set.count(tolower(result[i][j]))) {
                 
                 attron(COLOR_PAIR(1));
                 printw("%c", result[i][j]);
