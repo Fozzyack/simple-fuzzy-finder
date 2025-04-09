@@ -53,10 +53,11 @@ int main() {
     int c;
     int entries = 30;
     int choice = 0;
+    std::string selected_path = "";
     std::string search = "";
 
 
-    render(dirs, search, entries, choice);
+    render(dirs, search, entries, choice, selected_path);
     printw("Choice Index: %d\n", choice);
     printw("Search: %s ", search.c_str());
     refresh();
@@ -83,11 +84,12 @@ int main() {
         }
 
         clear();
-        render(dirs, search, entries, choice);
+        render(dirs, search, entries, choice, selected_path);
         printw("Choice Index: %d\n", choice);
         printw("Search: %s", search.c_str());
         refresh();
     }
     endwin();
+    std::cout << selected_path << std::endl;
     return 0;
 }

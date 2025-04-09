@@ -12,17 +12,6 @@
 
 
 
-int similar_letters(const std::string &dir, const std::string &search) {
-    int res = 0;
-    std::unordered_map<char, int> char_map;
-    for(char c: dir) char_map[tolower(c)]++;
-    for(char c: search) {
-        if (char_map.count(tolower(c))) res += char_map[tolower(c)] * 20;
-    }
-        
-    return res;
-}
-
 int scoring(const std::string &dir, const std::string &search) {
     int n = dir.size();
     int m = search.size();
@@ -39,8 +28,8 @@ int scoring(const std::string &dir, const std::string &search) {
 
     int score = 0;
     int consecutive_bonus = 10;
-    int start_bonus = 15;
-    int segment_bonus = 20;
+    int start_bonus = 20;
+    int segment_bonus = 30;
 
     for (int i = 0; i < matches.size(); i++) {
         int idx = matches[i];
@@ -50,7 +39,7 @@ int scoring(const std::string &dir, const std::string &search) {
         if(idx == 0 || dir[idx - 1] == '/' ||  dir[idx - 1] == '_' || dir[idx - 1] == '-') score += segment_bonus;
         if(idx == 0) score += start_bonus;
     }
-    score -= dir.length();
+    score -= dir.length() / 6;
     return score;
 }
 
@@ -67,11 +56,9 @@ void thread_score(int start, int end, const std::vector<std::string> &dirs, cons
     out.insert(out.end(), local.begin(), local.end());
 }
 
-std::string render(const std::vector<std::string> &dirs, const std::string &search, int entries, int &choice) {
+void render(const std::vector<std::string> &dirs, const std::string &search, int entries, int &choice, std::string &res) {
  
     std::vector<std::string> result;
-    std::string res = "";
-
 
 
 
@@ -119,8 +106,7 @@ std::string render(const std::vector<std::string> &dirs, const std::string &sear
 
     if (result_size> 0) res = result[choice];
     printw("\nTotal Size: %d\n", (int)result.size());
+
+    result_size > 0 ? res = result[choice] : res = "";
     printw("\nCurrent choice: %s\n", res.c_str());
-
-    return res;
-
 }
