@@ -1,4 +1,6 @@
 #include <cctype>
+#include <ncurses.h>
+#include <set>
 #include <string>
 #include <algorithm>
 #include <curses.h>
@@ -6,8 +8,10 @@
 
 #include <thread>
 #include <mutex>
+#include <filesystem>
 
 
+namespace fs = std::filesystem;
 
 
 
@@ -18,6 +22,7 @@ int scoring(const std::string &dir, const std::string &search) {
     std::vector<int> matches;
 
     for(int i = 0; si < m && i < n; i++) {
+        if (tolower(search[si]) == ' ') si++;
         if ( tolower(dir[i]) == tolower(search[si])) {
             matches.push_back(i);
             si++;
@@ -30,6 +35,7 @@ int scoring(const std::string &dir, const std::string &search) {
     int start_bonus = 20;
     int segment_bonus = 30;
 
+    if (dir.find(search) != std::string::npos) score += 10000;
     for (int i = 0; i < matches.size(); i++) {
         int idx = matches[i];
         score += 100 - idx;
@@ -86,16 +92,43 @@ void search_paths (const std::vector<std::string> dirs, const std::string &searc
     }
 }
 
-std::string render(const std::vector<std::string> &result, int &choice, int entries) {
+std::string render(const std::vector<std::string> &result, int &choice, int entries, std::set<char> char_set) {
  
     size_t total_size = result.size() < entries ? result.size() : entries;
 
     if (choice < 0) choice = total_size - 1;
-    else if (choice > total_size) choice = 0;
+    else if (choice >= total_size) choice = 0;
 
     for(size_t i = 0; i < total_size; i++) {
+
+        fs::path path(result[i]);
+        std::string filename = path.filename();
+        std::string ext = path.extension();
+        printw(" ");
         if (choice == i) printw("[*] ");
-        printw("%s\n", result[i].c_str());
+        if(fs::is_directory(path)) printw("📁 ");
+        else if(ext == ".cpp" || ext == ".ts" || ext == ".tsx" || ext == ".js" || ext == ".jsx" || ext == ".py" ) printw("📜 ");
+        else if(ext == ".csv" || ext == ".json") printw("📜 ");
+        else if(ext == ".md") printw("📝 ");
+        else if(ext == ".h" || ext == ".hpp") printw("🧩 ");
+        else if(filename == "") printw("🔒 ");
+        else if(ext == "" || ext == ".out" || ext == ".bin" || ext == ".exe" || ext == ".bat" || ext == ".app") printw("💾 ");
+        else if(filename == "CMakeLists") printw("🧱 ");
+        else if(fs::is_regular_file(path)) printw("📄 ");
+            
+        for(int j = 0; j < result[i].size(); j++) {
+            if (char_set.count(result[i][j])) {
+                
+                attron(COLOR_PAIR(1));
+                printw("%c", result[i][j]);
+                attroff(COLOR_PAIR(1));
+            }
+            else {
+                printw("%c", result[i][j]);
+            }
+        }
+        printw("\n");
+
     }
 
     std::string res;

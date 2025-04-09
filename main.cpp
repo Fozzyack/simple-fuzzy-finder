@@ -4,8 +4,11 @@
 #include <iostream>
 #include <thread>
 #include <unistd.h>
+#include <set>
 #include <vector>
 #include <filesystem>
+
+#include <locale.h>
 #include <ncurses.h>
 
 namespace fs = std::filesystem;
@@ -24,7 +27,14 @@ void print_dirs(const std::vector<std::string> &dirs, int entries) {
     }
 }
 
+void get_search_hashmap(const std::string &search, std::set<char> &char_set) {
+    for(int i = 0; i < search.size(); i++) char_set.insert(search[i]);
+}
+
+
 int main(int argc, char *argv[]) {
+
+    setlocale(LC_ALL, "");
 
     char *home = getenv("HOME");
 
@@ -40,8 +50,13 @@ int main(int argc, char *argv[]) {
         } else if ( std::string(argv[1]) == "-s" || std::string(argv[1]) == "--start") {
             path = home;
         } else {
-            std::cout << "Unknown argument given -- Try using -h for help" << std::endl;
-            exit(1);
+
+            if (!fs::exists(argv[1])) {
+                std::cout << "Unknown argument given -- Try using -h for help" << std::endl;
+                exit(1);
+            }
+
+            path = std::string(argv[1]);
         }
     }
 
@@ -65,7 +80,9 @@ int main(int argc, char *argv[]) {
     scrollok(stdscr, true);
     keypad(stdscr, true);
     cbreak();
-
+    start_color();
+    use_default_colors();
+    init_pair(1, COLOR_MAGENTA, -1);
 
     create_dir_thread.join();
 
@@ -76,14 +93,15 @@ int main(int argc, char *argv[]) {
     int choice = 0;
     std::string selected_path = "";
     std::string search = "";
+    std::set<char> char_set;
     std::vector<std::string> result;
 
 
     search_paths(dirs, search, result);
-    selected_path = render(result, choice, entries);
-    printw("\nChoice Index: %d\n", choice);
-    printw("Selected Choice: %s\n", selected_path.c_str());
-    printw("Search: %s ", search.c_str());
+    selected_path = render(result, choice, entries, char_set);
+    printw("\n Choice Index: %d\n", choice);
+    printw(" Selected Choice: %s\n", selected_path.c_str());
+    printw("\n Search 🔍: %s", search.c_str());
     refresh();
 
     while (c != '\n') {
@@ -114,15 +132,16 @@ int main(int argc, char *argv[]) {
             default:
                 search += c;
                 search_paths(dirs, search, result);
+                get_search_hashmap(search, char_set);
                 choice = 0;
                 break;
         }
 
         clear();
-        selected_path = render(result, choice, entries);
-        printw("\nChoice Index: %d\n", choice);
-        printw("Selected Choice: %s\n", selected_path.c_str());
-        printw("\nSearch: %s", search.c_str());
+        selected_path = render(result, choice, entries, char_set);
+        printw("\n Choice Index: %d\n", choice);
+        printw(" Selected Choice: %s\n", selected_path.c_str());
+        printw("\n Search 🔍: %s", search.c_str());
         refresh();
     }
     endwin();
