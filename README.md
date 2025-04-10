@@ -1,6 +1,7 @@
 # CLI Fuzzy Finder
 
 ![Poor quality gif](./demo.gif)
+(Gif is kinda low quality will upload a better one in the future)
 
 ## Problem
 
