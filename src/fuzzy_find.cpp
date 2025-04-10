@@ -35,7 +35,7 @@ int scoring(const std::string &dir, const std::string &search) {
     int start_bonus = 20;
     int segment_bonus = 30;
 
-    if (dir.find(search) != std::string::npos) score += 10000;
+    if (dir.find(search) != std::string::npos) score += 5000;
     for (int i = 0; i < matches.size(); i++) {
         int idx = matches[i];
         score += 100 - idx;
