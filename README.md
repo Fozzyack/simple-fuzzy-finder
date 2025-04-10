@@ -1,5 +1,7 @@
 # CLI Fuzzy Finder
 
+![Poor quality gif](./demo.gif)
+
 ## Problem
 
 - Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
