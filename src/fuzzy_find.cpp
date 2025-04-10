@@ -20,6 +20,7 @@ int scoring(const std::string &dir, const std::string &search) {
     int m = search.size();
     int si = 0;
     std::vector<int> matches;
+    if (search.length() >= 3 && dir.find(search) != std::string::npos) return 10000 - dir.length();
 
     for(int i = 0; si < m && i < n; i++) {
         if (tolower(search[si]) == ' ') si++;
@@ -31,14 +32,15 @@ int scoring(const std::string &dir, const std::string &search) {
     if (si < m) return 0;
 
     int score = 0;
-    int consecutive_bonus = 10;
+    int consecutive_bonus = 50;
     int start_bonus = 20;
-    int segment_bonus = 30;
+    int segment_bonus = 90;
 
-    if (dir.find(search) != std::string::npos) score += 5000;
+
     for (int i = 0; i < matches.size(); i++) {
         int idx = matches[i];
         score += 100 - idx;
+
 
         if (i > 0 && matches[i] == matches[i - 1] + 1) score += consecutive_bonus;
         if(idx == 0 || dir[idx - 1] == '/' ||  dir[idx - 1] == '_' || dir[idx - 1] == '-') score += segment_bonus;
