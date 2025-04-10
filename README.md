@@ -28,6 +28,15 @@ Create a simple fuzzy finder for your files. And make script installation easy.
 - Split the directory files into batches for multithreading
 - Make it look pretty
 
+## Scoring Algorithm
+
+- Levenshtein did not work as intended and took too long to run.
+- Moved to a scoring algorithm in which directory path names get reward based on different qualities.
+    - Is the char included in the directory path
+    - Detection of concurrent chars
+    - Does the char exist after a separator/delimeter
+    - Penalties apply for longer directories to ensure the smallest directory is returned first.
+
 ## Tech
 
 Will be using C++. For the speed. Might try to add multithreading for no the memes.
