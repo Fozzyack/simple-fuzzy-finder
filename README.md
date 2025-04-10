@@ -40,7 +40,8 @@ Create a simple fuzzy finder for your files. And make script installation easy.
 
 ## Tech
 
-Will be using C++. For the speed. Might try to add multithreading for no the memes.
+Will be using C++. For the speed. Might try to add multithreading for the memes.
+- Turns out multithreading was necessary.
 
 ## Implementation
 
