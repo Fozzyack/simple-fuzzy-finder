@@ -37,10 +37,11 @@ new project to complete
 
 To test this clone the git repository, and run the shell script. 
 
-```
+``` bash
 git clone https://github.com/Fozzyack/simple-fuzzy-finder
-cd simple-fuzzy-finder
-source ff.sh -s
+cd simple-fuzzy-finder/build
+cmake ..
+source ff.sh -s #or ff.fish if using fish as a shell
 ```
 
 ## Tech 
