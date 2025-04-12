@@ -4,7 +4,7 @@
 
 (Apologies this Gif is very low quality... will upload a better one in the future)
 
-## Problem
+## The Problem
 
 - Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
 new project to complete
@@ -17,12 +17,7 @@ new project to complete
   .config/fish/config.fish
   ```
 
-
-## Solution
-
-Create a simple fuzzy finder for your files. And make script installation easy.
-
-## How it's going to work
+## How it Works
 
 - Make a scoring algorithm for files
 - The highest scores should be the files we are looking for
@@ -38,12 +33,22 @@ Create a simple fuzzy finder for your files. And make script installation easy.
     - Does the char exist after a separator/delimeter
     - Penalties apply for longer directories to ensure the smallest directory is returned first.
 
-## Tech
+## Installation
+
+To test this clone the git repository, and run the shell script. 
+
+```
+git clone https://github.com/Fozzyack/simple-fuzzy-finder
+cd simple-fuzzy-finder
+source ff.sh -s
+```
+
+## Tech 
 
 Will be using C++. For the speed. Might try to add multithreading for the memes.
 - Turns out multithreading was necessary.
 
-## Implementation
+###Implementation
 
 - [x] Implement __ncurses__
 - [x] Create new terminal Screen instead of using stdout
