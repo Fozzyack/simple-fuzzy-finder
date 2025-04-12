@@ -41,7 +41,8 @@ To test this clone the git repository, and run the shell script.
 git clone https://github.com/Fozzyack/simple-fuzzy-finder
 cd simple-fuzzy-finder/build
 cmake ..
-source ff.sh -s #or ff.fish if using fish as a shell
+source ff.sh -s 
+# If using the fish shell please use ff.fish -s
 ```
 
 ## Tech 
