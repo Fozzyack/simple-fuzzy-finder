@@ -51,7 +51,7 @@ int scoring(const std::string &dir, const std::string &search) {
 }
 
 
-void thread_score(int start, int end, const std::vector<std::string> &dirs, const std::string &search, std::vector<std::pair<int, std::string>> &out, std::mutex &mut_lk) {
+void thread_score(size_t num_threads, int start, int end, const std::vector<std::string> &dirs, const std::string &search, std::vector<std::pair<int, std::string>> &out, std::mutex &mut_lk) {
 
     std::vector<std::pair<int, std::string>> local;
 
@@ -59,8 +59,16 @@ void thread_score(int start, int end, const std::vector<std::string> &dirs, cons
         int score = scoring(dirs[i], search);
         if (score > 0) local.push_back({score, dirs[i]});
     }
+
+    sort(local.begin(), local.end(),
+            [] (const std::pair<int, std::string> a, const std::pair<int, std::string> b) {
+                return a.first > b.first;
+            });
+
+    int number_of_results = local.size() / num_threads == 0 ? local.size() : local.size() / num_threads;
+
     std::lock_guard<std::mutex> lock(mut_lk);
-    out.insert(out.end(), local.begin(), local.end());
+    out.insert(out.end(), local.begin(), local.begin() + number_of_results);
 }
 
 void search_paths (const std::vector<std::string> dirs, const std::string &search, std::vector<std::string> &result) {
@@ -78,7 +86,7 @@ void search_paths (const std::vector<std::string> dirs, const std::string &searc
         for (size_t i = 0; i < num_threads; i++) {
             int start = i * chunk_size;
             int end = std::min(start + chunk_size, total_size);
-            threads.push_back(std::thread(thread_score, start, end, std::cref(dirs), std::cref(search), std::ref(scored_out), std::ref(mtx)));
+            threads.push_back(std::thread(thread_score, num_threads, start, end, std::cref(dirs), std::cref(search), std::ref(scored_out), std::ref(mtx)));
         }
 
         for ( std::thread &th: threads) th.join();
@@ -132,7 +140,6 @@ std::string render(const std::vector<std::string> &result, int &choice, int entr
             }
         }
         printw("\n");
-
     }
 
     std::string res;
