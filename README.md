@@ -6,16 +6,10 @@
 
 ## The Problem
 
-- Where are my files, why do I have to ```cd``` into everything. Wouldn't it be nice to just fuzzy find my files. I need a
-new project to complete
-- You cannot easily change the working directory of a user using a C++ program. You will have to eventually, interact
-  with the shell. Therefore, there must also be some form of configuration is the shells config with either:
+Where are my files? why do I have to ```cd``` into everything? Wouldn't it be nice to just fuzzy find my files?
 
-  ```
-  .bashrc
-  OR
-  .config/fish/config.fish
-  ```
+This small projects aims to solve this problem by creating a fuzzy finder for the easy navigation of the Linux
+directory.
 
 ## How it Works
 
@@ -43,6 +37,14 @@ cd simple-fuzzy-finder/build
 cmake ..
 source ff.sh -s 
 # If using the fish shell please use ff.fish -s
+```
+
+To make it permanent add this to your bashrc
+
+```bash
+ff() {
+    source "/path/to/ff.sh $1
+}
 ```
 
 ## Tech 
