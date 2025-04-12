@@ -142,6 +142,8 @@ std::string render(const std::vector<std::string> &result, int &choice, int entr
         printw("\n");
     }
 
+    printw("\n Total Items: %d", (int) result.size());
+
     std::string res;
     res = total_size > 0 ? result[choice] : "No Directory Chosen";
     return res;

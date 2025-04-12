@@ -69,3 +69,8 @@ Will be using C++. For the speed. Might try to add multithreading for the memes.
 - [x] Add Colour to show user search
 - [x] Add icons to search
 
+## Further Potential Optimisation
+
+- Thread scores need to get sorted from highest to lowest (Might be able to do further thread optimisation)
+- There is no point in showing thousands of results for a search. Might be able to lower the resulting thread item
+  count.
