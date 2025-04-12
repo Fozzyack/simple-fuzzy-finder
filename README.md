@@ -74,3 +74,8 @@ Will be using C++. For the speed. Might try to add multithreading for the memes.
 - Thread scores need to get sorted from highest to lowest (Might be able to do further thread optimisation)
 - There is no point in showing thousands of results for a search. Might be able to lower the resulting thread item
   count.
+
+### Bug(s)
+
+- Currently An issue if you start within your systems root directory. Even though it shouldn't list directories that you
+  do not have permission to view. Sometimes it might and may therefore cause an error.
