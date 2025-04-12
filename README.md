@@ -44,7 +44,7 @@ To make it permanent add this to your bashrc
 
 ```bash
 ff() {
-    source "/path/to/ff.sh $1
+    source "/path/to/ff.sh $1"
 }
 ```
 
