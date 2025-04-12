@@ -1,4 +1,4 @@
-/build/
+/build/*
 !/build/buildfileshere
 !/build/ff.sh
 !/build/ff.fish
