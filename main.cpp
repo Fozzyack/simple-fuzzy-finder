@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     
 
     int c;
-    int entries = 30;
+    int entries = 10;
     int choice = 0;
     std::string selected_path = "";
     std::string search = "";
