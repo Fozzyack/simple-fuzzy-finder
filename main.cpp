@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
     search_paths(dirs, search, result);
     selected_path = render(result, choice, entries, char_set);
     printw("\n Choice Index: %d\n", choice);
-    printw(" Selected Choice: %s\n", selected_path.c_str());
+    printw(" Selected Choice: %s\n\n", selected_path.c_str());
     printw(" Use left or right arrow keys to increase/decrease entries\n");
     printw(" Use up / down / tab to navigate up or down\n");
     printw(" Search 🔍: %s", search.c_str());
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
         clear();
         selected_path = render(result, choice, entries, char_set);
         printw("\n Choice Index: %d\n", choice);
-        printw(" Selected Choice: %s\n", selected_path.c_str());
+        printw(" Selected Choice: %s\n\n", selected_path.c_str());
         printw(" Use left or right arrow keys to increase/decrease entries\n");
         printw(" Use up / down / tab to navigate up or down\n");
         printw(" Search 🔍: %s", search.c_str());
