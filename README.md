@@ -138,10 +138,6 @@ make
 gdb ./ffcli
 ```
 
-## License
-
-This project is open source. Please check the repository for license details.
-
 ## Known Issues
 
 - Permission errors may occur when scanning system directories
